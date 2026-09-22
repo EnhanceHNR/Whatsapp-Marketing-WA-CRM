@@ -17,6 +17,13 @@ jobs:
         run: |
           git clone --mirror "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" repo.git
 
+      - name: Remove GitHub hidden PR refs
+        run: |
+          cd repo.git
+          git for-each-ref --format='%(refname)' refs/pull/ | while read ref; do
+            git update-ref -d "$ref"
+          done
+
       - name: Push to backup
         run: |
           cd repo.git
