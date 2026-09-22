@@ -1,0 +1,23 @@
+name: Sync Backup
+
+on:
+  push:
+    branches:
+      - '**'
+
+permissions:
+  contents: read
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clone repository
+        run: |
+          git clone --mirror "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" repo.git
+
+      - name: Push to backup
+        run: |
+          cd repo.git
+          git push --mirror "https://x-access-token:${{ secrets.BACKUP_TOKEN }}@github.com/EnhanceHNR/Whatsapp-Marketing-WA-CRM-backup.git"
